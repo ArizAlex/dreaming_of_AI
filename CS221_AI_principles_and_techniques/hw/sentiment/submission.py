@@ -22,7 +22,7 @@ def extractWordFeatures(x):
     Example: "I am what I am" --> {'I': 2, 'am': 2, 'what': 1}
     """
     # BEGIN_YOUR_CODE (our solution is 4 lines of code, but don't worry if you deviate from this)
-    raise Exception("Not implemented yet")
+    return collections.defaultdict(float,{w:x.count(w) for w in x.split()})
     # END_YOUR_CODE
 
 ############################################################
@@ -41,9 +41,17 @@ def learnPredictor(trainExamples, testExamples, featureExtractor, numIters, eta)
     You should call evaluatePredictor() on both trainExamples and testExamples
     to see how you're doing as you learn after each iteration.
     '''
-    weights = {}  # feature => weight
+    weights = defaultdict(float)  # feature => weight
     # BEGIN_YOUR_CODE (our solution is 12 lines of code, but don't worry if you deviate from this)
-    raise Exception("Not implemented yet")
+    def scMult(s, v):
+        return defaultdict(float,{key:s*v[key] for key in v})
+    def sign(x):
+        return 1 if dotProduct(weights,featureExtractor(x)) >= 0 else -1
+    for t in range(numIters):
+        for d in trainExamples:
+            gLoss = scMult(-1*d[1],featureExtractor(d[0])) if dotProduct(weights,scMult(d[1],featureExtractor(d[0])))<1 else defaultdict(float)
+            increment(weights, -1*eta, gLoss)        #recalculates weight vector
+        print(f'it: {t} | train: {evaluatePredictor(trainExamples,sign)} | test: {evaluatePredictor(testExamples,sign)}')
     # END_YOUR_CODE
     return weights
 
