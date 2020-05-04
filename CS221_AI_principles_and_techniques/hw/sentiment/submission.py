@@ -78,18 +78,20 @@ def generateDataset(numExamples, weights):
 ############################################################
 # Problem 3e: character features
 
-def extractCharacterFeatures(n):
+def extractCharacterFeatures(x, n=7):
     '''
     Return a function that takes a string |x| and returns a sparse feature
     vector consisting of all n-grams of |x| without spaces mapped to their n-gram counts.
     EXAMPLE: (n = 3) "I like tacos" --> {'Ili': 1, 'lik': 1, 'ike': 1, ...
     You may assume that n >= 1.
     '''
-    def extract(x):
-        # BEGIN_YOUR_CODE (our solution is 6 lines of code, but don't worry if you deviate from this)
-        raise Exception("Not implemented yet")
-        # END_YOUR_CODE
-    return extract
+    x = x.replace(' ','')
+    def generate_ngrams(s, n):
+        tokens = [token for token in s if token != ""]
+        ngrams = zip(*[tokens[i:] for i in range(n)])
+        return ["".join(ngram) for ngram in ngrams]
+    ngrams = generate_ngrams(x,n)
+    return defaultdict(float,{ngram:ngrams.count(ngram) for ngram in ngrams})
 
 ############################################################
 # Problem 4: k-means
